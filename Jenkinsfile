@@ -4,6 +4,7 @@ pipeline {
     environment {
         SONARQUBE_SERVER = 'http://localhost:9000'  // Replace with your SonarQube server URL
         ROCKETCHAT_WEBHOOK_URL = 'http://localhost:3000/hooks/65b6913ae19a180e8ec222ab/uhnJHuEmmS7PyFiD4xGChPg5Loam2LqxDn5fLNqLokiuWahJ'  // Replace with your Rocket.Chat webhook URL
+        REPO_URL = 'https://github.com/mrudaysharma/sonarqubeexample.git'
     }
 
     stages {
@@ -22,11 +23,15 @@ pipeline {
             }
         }
 
-        stage('Build') {
-            steps {
-                sh 'mvn clean install'
-            }
-        }
+       stage('Build') {
+           steps {
+               // Change the working directory to /calculator
+               dir('/calculator') {
+                   sh 'mvn clean install'
+               }
+           }
+       }
+
 
         stage('Static Code Analysis') {
             steps {
