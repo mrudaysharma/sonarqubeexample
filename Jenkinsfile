@@ -37,11 +37,17 @@ pipeline {
 
 
         stage('Static Code Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh "sonar-scanner -Dsonar.host.url=${SONARQUBE_SERVER}"
-                }
-            }
+           steps {
+                           withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+                               withSonarQubeEnv('SonarQube') {
+                                   sh """
+                                       sonar-scanner \
+                                       -Dsonar.host.url=${SONARQUBE_SERVER} \
+                                       -Dsonar.login=$SONAR_TOKEN
+                                   """
+                               }
+                           }
+                       }
         }
 
         stage('Send Report to Rocket.Chat') {
