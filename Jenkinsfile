@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+     docker {
+                image 'maven:3.8.0-alpine'
+                args '-v /root/.m2:/root/.m2'
+            }
+    }
     
     environment {
         SONARQUBE_SERVER = 'http://localhost:9000'  // Replace with your SonarQube server URL
