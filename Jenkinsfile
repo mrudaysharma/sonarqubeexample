@@ -1,11 +1,8 @@
 pipeline {
-    agent {
-     docker {
-                image 'maven:3.8.0-alpine'
-                args '-v /root/.m2:/root/.m2'
-            }
-    }
-    
+    agent any
+    tools {
+        maven 'maven-3.9.6'
+      }
     environment {
         SONARQUBE_SERVER = 'http://localhost:9000'  // Replace with your SonarQube server URL
         ROCKETCHAT_WEBHOOK_URL = 'http://localhost:3000/hooks/65b6913ae19a180e8ec222ab/uhnJHuEmmS7PyFiD4xGChPg5Loam2LqxDn5fLNqLokiuWahJ'  // Replace with your Rocket.Chat webhook URL
