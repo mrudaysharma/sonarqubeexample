@@ -30,7 +30,10 @@ pipeline {
                         script {
                             if (sh(returnStatus: true, script: 'mvn -v') != 0) {
                                 echo 'Maven not found, installing...'
-                                sh 'apt-get update && apt-get install -y maven'
+                                docker.image('maven:3.8.4-openjdk-17').inside {
+                                                        sh 'mvn -v'
+                                                        // Place your Maven commands here
+                                }
                             }
                         }
         }
