@@ -25,19 +25,7 @@ pipeline {
                     }
             }
         }
-        stage('Install Maven') {
-                    steps {
-                        script {
-                            if (sh(returnStatus: true, script: 'mvn -v') != 0) {
-                                echo 'Maven not found, installing...'
-                                docker.image('maven:3.8.4-openjdk-17').inside {
-                                                        sh 'mvn -v'
-                                                        // Place your Maven commands here
-                                }
-                            }
-                        }
-        }
-        }
+
        stage('Build') {
            steps {
                // Change the working directory to /calculator
