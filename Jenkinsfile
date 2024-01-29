@@ -11,6 +11,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
+                        dir(${WORKSPACE})
+                        {
                             def repoExists = fileExists('.git')
                             if (repoExists) {
                                  echo "Repository already exists, skipping clone step."
@@ -19,6 +21,7 @@ pipeline {
                               sh "git clone ${REPO_URL}"
                             }
                         }
+                       }
                     }
             }
         }
@@ -26,7 +29,7 @@ pipeline {
        stage('Build') {
            steps {
                // Change the working directory to /calculator
-               dir('/calculator') {
+               dir(${WORKSPACE}'/calculator') {
                    sh 'mvn clean install'
                }
            }
