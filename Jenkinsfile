@@ -41,12 +41,12 @@ pipeline {
                        dir("${WORKSPACE}/Calculator"){
                            withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
                                withSonarQubeEnv('SonarQube') {
-                               sh """
+                               sh '''
                                    sonar-scanner \
                                    -Dsonar.projectKey=MyCalculatorKey
                                    -Dsonar.host.url=${env.SONARQUBE_SERVER} \
                                    -Dsonar.login=${SONAR_TOKEN}
-                               """
+                               '''
 
                                }
                            }
