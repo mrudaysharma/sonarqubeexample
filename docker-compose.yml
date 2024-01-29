@@ -25,6 +25,8 @@ services:
       - mynetwork
     volumes:
       - sonarqube_data:/opt/sonarqube
+    environment:
+      - SONAR_FORCEAUTHENTICATION=false
 
   rocketchat:
     image: rocket.chat:6.3
