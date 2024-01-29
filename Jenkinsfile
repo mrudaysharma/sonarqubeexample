@@ -11,15 +11,15 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                                    def repoExists = fileExists('.git')
-                                    if (repoExists) {
-                                        echo "Repository already exists, skipping clone step."
-                                    } else {
-                                        withCredentials([string(credentialsId: 'GitHubAccessToken', variable: 'GITHUB_TOKEN')]) {
-                                            sh "git clone ${REPO_URL}"
-                                        }
-                                    }
-
+                            def repoExists = fileExists('.git')
+                            if (repoExists) {
+                                 echo "Repository already exists, skipping clone step."
+                            } else {
+                              withCredentials([string(credentialsId: 'GitHubAccessToken', variable: 'GITHUB_TOKEN')]) {
+                              sh "git clone ${REPO_URL}"
+                            }
+                        }
+                    }
             }
         }
 
