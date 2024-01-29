@@ -2,7 +2,6 @@ pipeline {
     agent any
     tools {
         maven 'maven3.9.6'
-        sonarqube 'SonarQubeScanner'
       }
     environment {
         SONARQUBE_SERVER = 'http://localhost:9000'  // Replace with your SonarQube server URL
