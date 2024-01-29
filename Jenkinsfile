@@ -25,7 +25,15 @@ pipeline {
                     }
             }
         }
-
+        stage('Install Maven') {
+                    steps {
+                        script {
+                            if (sh(returnStatus: true, script: 'mvn -v') != 0) {
+                                echo 'Maven not found, installing...'
+                                sh 'apt-get update && apt-get install -y maven'
+                            }
+                        }
+        }
        stage('Build') {
            steps {
                // Change the working directory to /calculator
