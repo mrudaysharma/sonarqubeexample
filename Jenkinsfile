@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                        dir(${WORKSPACE})
+                        dir("${WORKSPACE}")
                         {
                             def repoExists = fileExists('.git')
                             if (repoExists) {
