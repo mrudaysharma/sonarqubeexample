@@ -34,6 +34,7 @@ pipeline {
                             }
                         }
         }
+        }
        stage('Build') {
            steps {
                // Change the working directory to /calculator
