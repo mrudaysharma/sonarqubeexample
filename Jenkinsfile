@@ -40,7 +40,7 @@ pipeline {
            steps {
                        dir("${WORKSPACE}/Calculator"){
                            withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
-                               withSonarQubeEnv('SonarQube') {
+                               withSonarQubeEnv('SonarQubeScanner') {
                                sh '''
                                   mvn clean verify sonar:sonar\
                                    -Dsonar.projectKey=MyCalculatorKey\
