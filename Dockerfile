@@ -1,7 +1,7 @@
 # Use the official Jenkins image as a parent image
 FROM jenkins/jenkins:lts
 
-# Switch to root to install Java
+# Switch to root to install Java and Maven
 USER root
 
 # Install OpenJDK 17
@@ -11,6 +11,9 @@ RUN apt-get update && \
 
 # Set JAVA_HOME environment variable to point to the Java 17 installation
 ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64
+
+# Install Maven
+RUN apt-get install -y maven
 
 # Switch back to the Jenkins user
 USER jenkins
