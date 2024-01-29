@@ -42,9 +42,9 @@ pipeline {
                            withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
                                withSonarQubeEnv('SonarQube') {
                                sh '''
-                                   sonar-scanner \
+                                  mvn clean verify sonar:sonar\
                                    -Dsonar.projectKey=MyCalculatorKey
-                                   -Dsonar.host.url=${env.SONARQUBE_SERVER} \
+                                   -Dsonar.host.url=${SONARQUBE_SERVER} \
                                    -Dsonar.login=${SONAR_TOKEN}
                                '''
 
