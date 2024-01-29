@@ -26,27 +26,33 @@ pipeline {
             }
         }
 
-        stage("Build Artefact") {
-                 steps {
-                 dir("${WORKSPACE}/Calculator") {
-                      withSonarQubeEnv('sonarqube') {
-                           cho "Building master"
-                           sh "mvn clean install sonar:sonar"
-                           junit testResults: '**/target/*-reports/TEST-*.xml'
-                           // publish the JACOCO result
-                           jacoco execPattern: 'target/**/*.exec', classPattern: 'target/classes', sourcePattern: 'src/main/java'
-                           }
-                     }
-                      }
-                 }
+       stage('Build') {
+           steps {
+               // Change the working directory to /calculator
+               dir("${WORKSPACE}/Calculator") {
+                   sh 'mvn clean install'
+               }
+           }
+       }
 
-            stage("Quality Check") {
-                   steps {
-                       timeout(time: 3, unit: 'MINUTES') {
-                             waitForQualityGate abortPipeline: true
-                             }
-                       }
-                   }
+
+        stage('Static Code Analysis') {
+           steps {
+                       dir("${WORKSPACE}/Calculator"){
+                           withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+                               withSonarQubeEnv('SonarQube') {
+                               sh """
+                                   sonar-scanner \
+                                   -Dsonar.projectKey=MyCalculatorKey
+                                   -Dsonar.host.url=${env.SONARQUBE_SERVER} \
+                                   -Dsonar.login=${SONAR_TOKEN}
+                               """
+
+                               }
+                           }
+                        }
+                      }
+        }
 
         stage('Send Report to Rocket.Chat') {
             steps {
