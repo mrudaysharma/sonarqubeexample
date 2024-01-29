@@ -36,23 +36,27 @@ pipeline {
        }
 
 
-        stage('Static Code Analysis') {
-           steps {
-                       dir("${WORKSPACE}/Calculator"){
-                           withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
-                               withSonarQubeEnv('SonarQubeScanner') {
-                               sh """
-                                  mvn clean verify sonar:sonar\
-                                   -Dsonar.projectKey=MyCalculatorKey\
-                                   -Dsonar.host.url=${SONARQUBE_SERVER}\
-                                   -Dsonar.login=${SONAR_TOKEN}
-                               """
-
-                               }
+       stage('build && SonarQube analysis') {
+                   steps {
+                    dir("${WORKSPACE}/Calculator") {
+                       withSonarQubeEnv('My SonarQube Server') {
+                           // Optionally use a Maven environment you've configured already
+                           withMaven(maven:'Maven 3.8.7') {
+                               sh 'mvn clean package sonar:sonar'
                            }
-                        }
-                      }
-        }
+                       }
+                       }
+                   }
+               }
+               stage("Quality Gate") {
+                   steps {
+                       timeout(time: 1, unit: 'HOURS') {
+                           // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                           // true = set pipeline to UNSTABLE, false = don't
+                           waitForQualityGate abortPipeline: true
+                       }
+                   }
+               }
 
         stage('Send Report to Rocket.Chat') {
             steps {
