@@ -11,7 +11,7 @@ pipeline {
             steps {
                 script{
                     withCredentials([string(credentialsId: 'GitHubAccessToken', variable: 'GITHUB_TOKEN')]) {
-                                                           sh "git clone https://github.com/yourusername/yourrepository.git"
+                                                           sh "git clone https://github.com/mrudaysharma/sonarqubeexample.git"
                     }
                 }
 
