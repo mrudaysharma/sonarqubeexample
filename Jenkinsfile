@@ -28,15 +28,6 @@ pipeline {
             }
         }
 
-       stage('Build') {
-           steps {
-               // Change the working directory to /calculator
-               dir("${WORKSPACE}/Calculator") {
-                   sh 'mvn clean install'
-               }
-           }
-       }
-
 
        stage('build && SonarQube analysis') {
                    steps {
