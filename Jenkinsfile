@@ -2,6 +2,7 @@ pipeline {
     agent any
     tools {
         maven 'maven3.9.6'
+        sonarqube 'SonarQubeScanner'
       }
     environment {
         SONARQUBE_SERVER = 'http://localhost:9000'  // Replace with your SonarQube server URL
@@ -32,10 +33,10 @@ pipeline {
        stage('build && SonarQube analysis') {
                    steps {
                     dir("${WORKSPACE}/Calculator") {
-                       withSonarQubeEnv('My SonarQube Server') {
+                       withSonarQubeEnv('SonarServer') {
                            // Optionally use a Maven environment you've configured already
 
-                               sh 'mvn clean package sonar:sonar'
+                               sh 'mvn clean package sonarqube'
 
                        }
                        }
