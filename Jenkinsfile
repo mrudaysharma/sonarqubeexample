@@ -43,8 +43,8 @@ pipeline {
                                withSonarQubeEnv('SonarQube') {
                                sh '''
                                   mvn clean verify sonar:sonar\
-                                   -Dsonar.projectKey=MyCalculatorKey
-                                   -Dsonar.host.url=${SONARQUBE_SERVER} \
+                                   -Dsonar.projectKey=MyCalculatorKey\
+                                   -Dsonar.host.url=${SONARQUBE_SERVER}\
                                    -Dsonar.login=${SONAR_TOKEN}
                                '''
 
