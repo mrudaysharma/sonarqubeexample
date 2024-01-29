@@ -1,0 +1,63 @@
+version: '3.8'
+services:
+  jenkins:
+    network_mode: bridge
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: jenkins
+    ports:
+      - "9090:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - JENKINS_OPTS=--prefix=/jenkins
+
+  sonarqube:
+    image: sonarqube:latest
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+    volumes:
+      - sonarqube_data:/opt/sonarqube
+
+  rocketchat:
+    image: rocket.chat:6.3
+    container_name: rocketchat
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URL=mongodb://mongoadmin:secret@mongo:27017/rocketchat
+      - MONGO_OPLOG_URL=mongodb://mongo:27017/local
+      - ROOT_URL=http://localhost:3000
+      - Accounts_UseDNSDomainCheck=true
+    restart: unless-stopped
+    networks:
+      - mynetwork  # Specify the custom network here
+  mongo:
+    image: mongo:4.4
+    container_name: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongoadmin
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASS=admin
+    networks:
+      - mynetwork  # Specify the custom network here
+      
+networks:
+  mynetwork:
+    external: true  # Declare the custom network as external
+
+volumes:
+  jenkins_data:
+  sonarqube_data:
+  mongo_data:
