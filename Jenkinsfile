@@ -34,7 +34,7 @@ pipeline {
                            sh "mvn clean install sonar:sonar"
                            junit testResults: '**/target/*-reports/TEST-*.xml'
                            // publish the JACOCO result
-                           jacoco(execPattern: 'target/jacoco.exec')
+                           jacoco execPattern: 'target/**/*.exec', classPattern: 'target/classes', sourcePattern: 'src/main/java'
                            }
                      }
                       }
