@@ -29,7 +29,7 @@ pipeline {
        stage('Build') {
            steps {
                // Change the working directory to /calculator
-               dir(${WORKSPACE}'/calculator') {
+               dir("${WORKSPACE}/calculator") {
                    sh 'mvn clean install'
                }
            }
