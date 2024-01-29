@@ -38,16 +38,20 @@ pipeline {
 
         stage('Static Code Analysis') {
            steps {
+                       dir("${WORKSPACE}/Calculator"){
                            withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
                                withSonarQubeEnv('SonarQube') {
-                                   sh """
-                                       sonar-scanner \
-                                       -Dsonar.host.url=${SONARQUBE_SERVER} \
-                                       -Dsonar.login='sqa_0e3f3fbb5462b9de84f5bb5d5366b507ae04c5ae'
-                                   """
+                               sh """
+                                   sonar-scanner \
+                                   -Dsonar.projectKey=MyCalculatorKey
+                                   -Dsonar.host.url=${env.SONARQUBE_SERVER} \
+                                   -Dsonar.login=${SONAR_TOKEN}
+                               """
+
                                }
                            }
-                       }
+                        }
+                      }
         }
 
         stage('Send Report to Rocket.Chat') {
