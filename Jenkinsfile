@@ -37,7 +37,7 @@ pipeline {
 
                                sh 'mvn sonar:sonar \
                                      -Dsonar.projectKey=com.it4process:Calculator \
-                                     -Dsonar.host.url=http://sonarqube:9000 \
+                                     -Dsonar.host.url=http://localhost:9000 \
                                      -Dsonar.login=sqp_3e454e2ed0f3bf0342473701341abd2bf34d38fd'
 
                        }
