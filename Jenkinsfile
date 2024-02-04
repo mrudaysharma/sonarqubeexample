@@ -35,7 +35,10 @@ pipeline {
                        withSonarQubeEnv('SonarServer') {
                            // Optionally use a Maven environment you've configured already
 
-                               sh 'mvn sonar:sonar'
+                               sh 'mvn sonar:sonar \
+                                     -Dsonar.projectKey=com.it4process:Calculator \
+                                     -Dsonar.host.url=http://sonarqube:9000 \
+                                     -Dsonar.login=sqp_3e454e2ed0f3bf0342473701341abd2bf34d38fd'
 
                        }
                        }
