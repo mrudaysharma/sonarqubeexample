@@ -44,10 +44,14 @@ pipeline {
                stage("Quality Gate") {
                    steps {
                        timeout(time: 10, unit: 'SECOND') {
-                           // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-                           // true = set pipeline to UNSTABLE, false = don't
-                           waitForQualityGate abortPipeline: true
-                       }
+                          script {
+                                          // Wait for SonarQube's quality gate result and optionally abort the pipeline if it fails
+                                          def qg = waitForQualityGate() // This will return a result object
+                                          if (qg.status != 'OK') {
+                                              error "Pipeline aborted due to Quality Gate failure"
+                                          }
+                           }
+                        }
                    }
                }
 
