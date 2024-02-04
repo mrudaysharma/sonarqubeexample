@@ -35,7 +35,7 @@ pipeline {
                        withSonarQubeEnv('SonarServer') {
                            // Optionally use a Maven environment you've configured already
 
-                               sh 'mvn sonar:sonar'
+                               sh 'mvn sonar:sonar -Dsonar.host.url=http://sonarqube:9000'
 
                        }
                        }
