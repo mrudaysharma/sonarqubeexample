@@ -42,8 +42,6 @@ pipeline {
                    }
                }
 
-
-            stages {
                     stage("Quality Gate") {
                         steps {
                             timeout(time: 5, unit: 'MINUTES') {
@@ -57,7 +55,7 @@ pipeline {
                             }
                         }
                     }
-				}
+
                     stage("Send Report to Rocket.Chat") {
                         steps {
                             script {
@@ -84,7 +82,7 @@ pipeline {
                             }
                         }
                     }
-
+}
 
     post {
         success {
@@ -95,3 +93,4 @@ pipeline {
         }
     }
 }
+
