@@ -43,63 +43,47 @@ pipeline {
                }
 
 
-               stage("Quality Gate") {
-                   steps {
-                       timeout(time: 5, unit: 'MINUTES') {
-                          script {
-                                          // Wait for SonarQube's quality gate result and optionally abort the pipeline if it fails
-                                           sleep(10)
-                                          def qg = waitForQualityGate() // This will return a result object
-                                          if (qg.status != 'OK') {
-                                              def reportText = "SonarQube analysis is complete! [View Report](${SONARQUBE_SERVER}/dashboard?id=${env.JOB_NAME})"
-
-                                                                  def payload = [
-                                                                      text: reportText,
-                                                                      channel: '#JenkinsPipeline',  // Replace with your Rocket.Chat channel
-                                                                  ]
-
-                                                                  def response = httpRequest(
-                                                                      acceptType: 'APPLICATION_JSON',
-                                                                      contentType: 'APPLICATION_JSON',
-                                                                      httpMode: 'POST',
-                                                                      requestBody: jsonToString(payload),
-                                                                      url: ROCKETCHAT_WEBHOOK_URL
-                                                                  )
-
-                                                                  if (response.status != 200) {
-                                                                      error "Failed to send report to Rocket.Chat: HTTP ${response.status}"
-                                                                  }
-                                          }
-                           }
+            stages {
+                    stage("Quality Gate") {
+                        steps {
+                            timeout(time: 5, unit: 'MINUTES') {
+                                script {
+                                    // Wait for SonarQube's quality gate result
+                                    sleep(10) // Consider removing this if it's not necessary
+                                    def qg = waitForQualityGate() // This will return a result object
+                                    // Store the quality gate status for use in later stages or post block
+                                    env.qualityGateStatus = qg.status
+                                }
+                            }
                         }
-                   }
-               }
+                    }
+                    stage("Send Report to Rocket.Chat") {
+                        steps {
+                            script {
+                                // Prepare the report text based on the quality gate status
+                                def statusMessage = (env.qualityGateStatus == 'OK') ? "passed" : "failed"
+                                def reportText = "SonarQube analysis is complete and the quality gate has ${statusMessage}! [View Report](${SONARQUBE_SERVER}/dashboard?id=${env.JOB_NAME})"
 
-        stage('Send Report to Rocket.Chat') {
-            steps {
-                script {
-                    def reportText = "SonarQube analysis is complete! [View Report](${SONARQUBE_SERVER}/dashboard?id=${env.JOB_NAME})"
+                                def payload = [
+                                    text: reportText,
+                                    channel: '#JenkinsPipeline'  // Replace with your Rocket.Chat channel
+                                ]
 
-                    def payload = [
-                        text: reportText,
-                        channel: '#JenkinsPipeline',  // Replace with your Rocket.Chat channel
-                    ]
+                                def response = httpRequest(
+                                    acceptType: 'APPLICATION_JSON',
+                                    contentType: 'APPLICATION_JSON',
+                                    httpMode: 'POST',
+                                    requestBody: jsonToString(payload),
+                                    url: ROCKETCHAT_WEBHOOK_URL
+                                )
 
-                    def response = httpRequest(
-                        acceptType: 'APPLICATION_JSON',
-                        contentType: 'APPLICATION_JSON',
-                        httpMode: 'POST',
-                        requestBody: jsonToString(payload),
-                        url: ROCKETCHAT_WEBHOOK_URL
-                    )
-
-                    if (response.status != 200) {
-                        error "Failed to send report to Rocket.Chat: HTTP ${response.status}"
+                                if (response.status != 200) {
+                                    error "Failed to send report to Rocket.Chat: HTTP ${response.status}"
+                                }
+                            }
+                        }
                     }
                 }
-            }
-        }
-    }
 
     post {
         success {
