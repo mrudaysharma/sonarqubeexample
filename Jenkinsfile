@@ -61,7 +61,7 @@ pipeline {
                     stage("Send Report to Rocket.Chat") {
                         steps {
                             script {
-                                slip(10)
+
                                 // Prepare the report text based on the quality gate status
                                 def statusMessage = (env.qualityGateStatus == 'OK') ? "passed" : "failed"
                                 def reportText = "SonarQube analysis is complete and the quality gate has ${statusMessage}! [View Report](${SONARQUBE_SERVER}/dashboard?id=${env.JOB_NAME})"
@@ -78,7 +78,7 @@ pipeline {
                                         httpMode: 'POST',
                                         requestBody: jsonPayload,
                                         url: ROCKETCHAT_WEBHOOK_URL,
-                                        timeout: 120000
+                                        timeout: 1200000
                                     )
 
                                 if (response.status != 200) {
