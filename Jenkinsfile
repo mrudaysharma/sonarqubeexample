@@ -55,7 +55,7 @@ pipeline {
 
                                                                   def payload = [
                                                                       text: reportText,
-                                                                      channel: 'JenkinsPipeline',  // Replace with your Rocket.Chat channel
+                                                                      channel: '#JenkinsPipeline',  // Replace with your Rocket.Chat channel
                                                                   ]
 
                                                                   def response = httpRequest(
@@ -82,7 +82,7 @@ pipeline {
 
                     def payload = [
                         text: reportText,
-                        channel: 'JenkinsPipeline',  // Replace with your Rocket.Chat channel
+                        channel: '#JenkinsPipeline',  // Replace with your Rocket.Chat channel
                     ]
 
                     def response = httpRequest(
