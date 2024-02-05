@@ -77,7 +77,7 @@ pipeline {
 
                                     def response = httpRequest(
                                         acceptType: 'APPLICATION_JSON',
-                                        headers: headers,
+                                        contentType: 'APPLICATION_JSON',
                                         httpMode: 'POST',
                                         requestBody: jsonPayload,
                                         url: ROCKETCHAT_WEBHOOK_URL,
