@@ -36,12 +36,8 @@ pipeline {
                     dir("${WORKSPACE}/Calculator") {
                        withSonarQubeEnv('SonarServer') {
                            // Optionally use a Maven environment you've configured already
-                              env.SONAR_PROJECT_KEY = sh(script: "grep '^sonar.projectKey' sonar-project.properties | cut -d= -f2",
-                                                         returnStdout: true).trim()
-
                                sh 'mvn clean install sonar:sonar -Dsonar.host.url=http://sonarqube:9000'
-
-                       }
+                         }
                        }
                    }
                }
@@ -68,7 +64,7 @@ pipeline {
 
                                 // Prepare the report text based on the quality gate status
                                 def statusMessage = (env.qualityGateStatus == 'OK') ? "passed" : "failed"
-                                def reportText = "SonarQube analysis is complete and the quality gate has ${statusMessage}! [View Report](${SONARQUBE_SERVER}/dashboard?id=${env.SONAR_PROJECT_KEY})"
+                                def reportText = "SonarQube analysis is complete and the quality gate has ${statusMessage}! [View Report](${SONARQUBE_SERVER}/dashboard?id=com.it4process:Calculator"
 
                                 def headers = [
                                     'Content-Type': 'application/json'
