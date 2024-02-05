@@ -57,6 +57,7 @@ pipeline {
                             }
                         }
                     }
+				}
                     stage("Send Report to Rocket.Chat") {
                         steps {
                             script {
@@ -83,7 +84,7 @@ pipeline {
                             }
                         }
                     }
-                }
+
 
     post {
         success {
