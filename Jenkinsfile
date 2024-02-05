@@ -40,8 +40,9 @@ pipeline {
                        }
                        }
                    }
-                   sleep(10)
                }
+
+                   sleep(10)
                stage("Quality Gate") {
                    steps {
                        timeout(time: 5, unit: 'MINUTES') {
