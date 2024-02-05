@@ -1,3 +1,5 @@
+import groovy.json.JsonOutput
+
 pipeline {
     agent any
     tools {
@@ -67,14 +69,15 @@ pipeline {
                                     text: reportText,
                                     channel: '#JenkinsPipeline'  // Replace with your Rocket.Chat channel
                                 ]
+                                    def jsonPayload = JsonOutput.toJson(payload)
 
-                                def response = httpRequest(
-                                    acceptType: 'APPLICATION_JSON',
-                                    contentType: 'APPLICATION_JSON',
-                                    httpMode: 'POST',
-                                    requestBody: jsonToString(payload),
-                                    url: ROCKETCHAT_WEBHOOK_URL
-                                )
+                                    def response = httpRequest(
+                                        acceptType: 'APPLICATION_JSON',
+                                        contentType: 'APPLICATION_JSON',
+                                        httpMode: 'POST',
+                                        requestBody: jsonPayload,
+                                        url: ROCKETCHAT_WEBHOOK_URL
+                                    )
 
                                 if (response.status != 200) {
                                     error "Failed to send report to Rocket.Chat: HTTP ${response.status}"
