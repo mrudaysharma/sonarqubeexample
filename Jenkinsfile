@@ -70,9 +70,8 @@ pipeline {
                                     'Content-Type': 'application/json'
                                 ]
                                 def payload = [
-                                    text: reportText, // Replace with your Rocket.Chat channel
-                                    channel: '#general'
-                                ]
+                                    text: reportText // Replace with your Rocket.Chat channel
+                                    ]
                                     def jsonPayload = JsonOutput.toJson(payload)
 
                                     def response = httpRequest(
