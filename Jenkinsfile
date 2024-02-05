@@ -66,6 +66,9 @@ pipeline {
                                 def statusMessage = (env.qualityGateStatus == 'OK') ? "passed" : "failed"
                                 def reportText = "SonarQube analysis is complete and the quality gate has ${statusMessage}! [View Report](${SONARQUBE_SERVER}/dashboard?id=${env.JOB_NAME})"
 
+                                def headers = [
+                                    'Content-Type': 'application/json'
+                                ]
                                 def payload = [
                                     text: reportText,
                                     channel: '#JenkinsPipeline'  // Replace with your Rocket.Chat channel
@@ -74,7 +77,7 @@ pipeline {
 
                                     def response = httpRequest(
                                         acceptType: 'APPLICATION_JSON',
-                                        contentType: 'APPLICATION_JSON',
+                                        headers: headers,
                                         httpMode: 'POST',
                                         requestBody: jsonPayload,
                                         url: ROCKETCHAT_WEBHOOK_URL,
