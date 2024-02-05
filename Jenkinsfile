@@ -70,7 +70,8 @@ pipeline {
                                     'Content-Type': 'application/json'
                                 ]
                                 def payload = [
-                                    text: reportText  // Replace with your Rocket.Chat channel
+                                    text: reportText, // Replace with your Rocket.Chat channel
+                                    channel: '#JenkinsPipeline'
                                 ]
                                     def jsonPayload = JsonOutput.toJson(payload)
 
