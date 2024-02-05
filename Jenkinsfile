@@ -37,7 +37,7 @@ pipeline {
                        withSonarQubeEnv('SonarServer') {
                            // Optionally use a Maven environment you've configured already
 
-                               sh 'mvn sonar:sonar -Dsonar.host.url=http://sonarqube:9000'
+                               sh 'mvn clean install sonar:sonar -Dsonar.host.url=http://sonarqube:9000'
 
                        }
                        }
@@ -62,9 +62,14 @@ pipeline {
                         steps {
                             script {
 
+                              env.SONAR_PROJECT_KEY = sh(
+                                            script: "grep '^sonar.projectKey' sonar-project.properties | cut -d= -f2",
+                                            returnStdout: true
+                                        ).trim()
+
                                 // Prepare the report text based on the quality gate status
                                 def statusMessage = (env.qualityGateStatus == 'OK') ? "passed" : "failed"
-                                def reportText = "SonarQube analysis is complete and the quality gate has ${statusMessage}! [View Report](${SONARQUBE_SERVER}/dashboard?id=${env.JOB_NAME})"
+                                def reportText = "SonarQube analysis is complete and the quality gate has ${statusMessage}! [View Report](${SONARQUBE_SERVER}/dashboard?id=${env.SONAR_PROJECT_KEY})"
 
                                 def headers = [
                                     'Content-Type': 'application/json'
