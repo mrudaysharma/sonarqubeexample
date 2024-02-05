@@ -76,7 +76,8 @@ pipeline {
                                         contentType: 'APPLICATION_JSON',
                                         httpMode: 'POST',
                                         requestBody: jsonPayload,
-                                        url: ROCKETCHAT_WEBHOOK_URL
+                                        url: ROCKETCHAT_WEBHOOK_URL,
+                                        timeout: 120000
                                     )
 
                                 if (response.status != 200) {
