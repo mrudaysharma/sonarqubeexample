@@ -51,7 +51,24 @@ pipeline {
                                            sleep(10)
                                           def qg = waitForQualityGate() // This will return a result object
                                           if (qg.status != 'OK') {
-                                              error "Pipeline aborted due to Quality Gate failure"
+                                              def reportText = "SonarQube analysis is complete! [View Report](${SONARQUBE_SERVER}/dashboard?id=${env.JOB_NAME})"
+
+                                                                  def payload = [
+                                                                      text: reportText,
+                                                                      channel: 'JenkinsPipeline',  // Replace with your Rocket.Chat channel
+                                                                  ]
+
+                                                                  def response = httpRequest(
+                                                                      acceptType: 'APPLICATION_JSON',
+                                                                      contentType: 'APPLICATION_JSON',
+                                                                      httpMode: 'POST',
+                                                                      requestBody: jsonToString(payload),
+                                                                      url: ROCKETCHAT_WEBHOOK_URL
+                                                                  )
+
+                                                                  if (response.status != 200) {
+                                                                      error "Failed to send report to Rocket.Chat: HTTP ${response.status}"
+                                                                  }
                                           }
                            }
                         }
@@ -65,7 +82,7 @@ pipeline {
 
                     def payload = [
                         text: reportText,
-                        channel: 'YOUR_ROCKETCHAT_CHANNEL',  // Replace with your Rocket.Chat channel
+                        channel: 'JenkinsPipeline',  // Replace with your Rocket.Chat channel
                     ]
 
                     def response = httpRequest(
