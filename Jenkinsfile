@@ -71,7 +71,7 @@ pipeline {
                                 ]
                                 def payload = [
                                     text: reportText, // Replace with your Rocket.Chat channel
-                                    channel: '#JenkinsPipeline'
+                                    channel: 'JenkinsPipeline'
                                 ]
                                     def jsonPayload = JsonOutput.toJson(payload)
 
