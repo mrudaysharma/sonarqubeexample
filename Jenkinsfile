@@ -64,7 +64,7 @@ pipeline {
 
                                 // Prepare the report text based on the quality gate status
                                 def statusMessage = (env.qualityGateStatus == 'OK') ? "passed" : "failed"
-                                def reportText = "SonarQube analysis is complete and the quality gate has ${statusMessage}! [View Report](${SONARQUBE_SERVER}/dashboard?id=com.it4process:Calculator"
+                                def reportText = "Hi Hello, SonarQube analysis is complete and the quality gate has ${statusMessage}! [View Report](${SONARQUBE_SERVER}/dashboard?id=com.it4process:Calculator"
 
                                 def headers = [
                                     'Content-Type': 'application/json'
